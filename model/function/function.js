@@ -90,29 +90,61 @@ const getAlunoStatus = function(status) {
 
 const getAlunoAnos = function(ano, status = undefined) {
 
+        let jsonAlunos = {}
+        let arrayAlunos = []
+        let arrayAlunosFiltro = []
+
+        alunos.alunos.forEach(aluno => {
+
+            if (aluno.curso[0].conclusao == ano)
+                arrayAlunos.push(aluno)
+        });
+
+        arrayAlunos.forEach(alunosFiltrado => {
+            if (alunosFiltrado.status == status) {
+
+                arrayAlunosFiltro.push(alunosFiltrado)
+            }
+
+        })
+
+        jsonAlunos.alunos = arrayAlunosFiltro.length == 0 ? arrayAlunos : arrayAlunosFiltro
+
+        return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
+    }
+    // console.log(getAlunoAnos(2022));
+
+const getTeste = function(ano, json = undefined) {
+
+    let filtroAlunos = []
     let jsonAlunos = {}
     let arrayAlunos = []
-    let arrayAlunosFiltro = []
 
-    alunos.alunos.forEach(aluno => {
+    if (json == undefined)
+        filtroAlunos.push(alunos.alunos)
+    else
+        filtroAlunos.push(json)
 
-        if (aluno.curso[0].conclusao == ano)
-            arrayAlunos.push(aluno)
-    });
+    filtroAlunos.forEach(aluno => {
 
-    arrayAlunos.forEach(alunosFiltrado => {
-        if (alunosFiltrado.status == status) {
+        aluno.alunos.forEach(alunosFiltrado => {
 
-            arrayAlunosFiltro.push(alunosFiltrado)
-        }
+            alunosFiltrado.curso.forEach(element => {
 
+                if (element.conclusao == ano)
+                    arrayAlunos.push(element)
+            })
+
+        })
     })
 
-    jsonAlunos.alunos = arrayAlunosFiltro.length == 0 ? arrayAlunos : arrayAlunosFiltro
+    jsonAlunos.alunos = arrayAlunos
 
     return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
 }
-console.log(getAlunoAnos(2022));
+console.log(getTeste(2022, getAlunoCurso('DS')));
+// console.log(getAlunoStatus('Finalizado'));
+
 
 module.exports = {
     getCursos,
