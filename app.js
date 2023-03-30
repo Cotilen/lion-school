@@ -51,14 +51,84 @@ const functions = require('./model/function/function.js')
 
 app.get('/v1/lion-school/cursos', cors(), async function(request, response, next) {
 
-    //Chama a função que retorna os cursos
-    let listaDeCursos = functions.getCursos()
+    let statusCode
+    let listaCursos = {}
 
-    //Tratamento para validar se a função realizou o processamento
-    if (listaDeCursos) {
-        //Retorna o Json e o Status code
-        response.json(listaDeCursos)
-        response.status(200)
-    } else
-        response.status(500)
+    let curso = functions.getCursos()
+
+    if (curso) {
+        statusCode = 200
+        listaCursos = curso
+    } else {
+        statusCode = 404
+    }
+
+
+    response.status(statusCode)
+    response.json(listaCursos)
+})
+
+
+app.get('/v1/lion-school/alunos', cors(), async function(request, response, next) {
+
+    let curso = request.query.curso
+    let status = request.query.status
+    let statusCode
+    let listaAlunos = {}
+    let aluno
+
+    if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '') {
+        statusCode = 400
+        dadosAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
+    } else {
+
+        if (curso == undefined && status == undefined)
+            aluno = functions.getAlunos()
+        else if (status == undefined)
+            aluno = functions.getAlunoCurso(curso)
+        else
+            aluno = functions.getAlunoStatus(status)
+    }
+    if (aluno) {
+        statusCode = 200
+        listaAlunos = aluno
+    } else {
+        statusCode = 404
+    }
+
+
+    response.status(statusCode)
+    response.json(listaAlunos)
+})
+
+app.get('/v1/lion-school/alunos/:matricula', cors(), async function(request, response, next) {
+
+    let nmrMatricula = request.params.matricula
+    let statusCode
+    let dadosAlunos = {}
+
+    if (nmrMatricula == '' || nmrMatricula == undefined || isNaN(nmrMatricula)) {
+        statusCode = 400
+        dadosAlunos.message = ("Não é possível processar a requisição pois a matricula não foi informada ou não existe")
+    } else {
+        let alunos = functions.getAlunoMatricula(nmrMatricula)
+
+        if (alunos) {
+            statusCode = 200
+            dadosAlunos = alunos
+        } else {
+            statusCode = 404
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dadosAlunos)
+
+})
+
+app.listen(8080, function() {
+
+
+    console.log('Servidor aguardando requisições na porta 8080');
+
 })

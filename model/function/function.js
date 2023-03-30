@@ -54,7 +54,7 @@ const getAlunoMatricula = function(matricula) {
 
 const getAlunoCurso = function(curso) {
 
-        let jsonAlunos = {}
+        let jsonAlunosCurso = {}
         let arrayAlunos = []
 
         alunos.alunos.forEach(aluno => {
@@ -64,11 +64,11 @@ const getAlunoCurso = function(curso) {
 
         });
 
-        jsonAlunos.alunos = arrayAlunos
+        jsonAlunosCurso.alunos = arrayAlunos
 
-        return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
+        return (jsonAlunosCurso.alunos).length != 0 ? jsonAlunosCurso : false
     }
-    // console.log(getAlunoCurso("RDS"));
+    // console.log(getAlunoCurso("DS"));
 
 const getAlunoStatus = function(status) {
 
@@ -87,3 +87,37 @@ const getAlunoStatus = function(status) {
         return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
     }
     // console.log(getAlunoStatus('Finalizado'));
+
+const getAlunoAnos = function(ano, status = undefined) {
+
+    let jsonAlunos = {}
+    let arrayAlunos = []
+    let arrayAlunosFiltro = []
+
+    alunos.alunos.forEach(aluno => {
+
+        if (aluno.curso[0].conclusao == ano)
+            arrayAlunos.push(aluno)
+    });
+
+    arrayAlunos.forEach(alunosFiltrado => {
+        if (alunosFiltrado.status == status) {
+
+            arrayAlunosFiltro.push(alunosFiltrado)
+        }
+
+    })
+
+    jsonAlunos.alunos = arrayAlunosFiltro.length == 0 ? arrayAlunos : arrayAlunosFiltro
+
+    return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
+}
+console.log(getAlunoAnos(2022));
+
+module.exports = {
+    getCursos,
+    getAlunos,
+    getAlunoMatricula,
+    getAlunoCurso,
+    getAlunoStatus
+}
