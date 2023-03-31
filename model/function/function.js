@@ -59,6 +59,7 @@ const getAlunoCurso = function(curso) {
 
         alunos.alunos.forEach(aluno => {
 
+
             if (aluno.curso[0].sigla == curso)
                 arrayAlunos.push(aluno)
 
@@ -68,82 +69,144 @@ const getAlunoCurso = function(curso) {
 
         return (jsonAlunosCurso.alunos).length != 0 ? jsonAlunosCurso : false
     }
-    // console.log(getAlunoCurso("DS"));
+    // console.log(getAlunoCurso("RDS"));
 
-const getAlunoStatus = function(status) {
+const getAlunoStatus = function(status, curso) {
 
         let jsonAlunos = {}
         let arrayAlunos = []
+        let arrayAlunosFiltrado = []
+        let jsonAlunosFiltro = []
 
-        alunos.alunos.forEach(aluno => {
+        if (curso == undefined) {
+            jsonAlunosFiltro.alunos = alunos.alunos
 
-            if (aluno.status == status)
-                arrayAlunos.push(aluno)
+            jsonAlunosFiltro.alunos.forEach(alunosFiltrado => {
 
-        });
+                if (alunosFiltrado.status == status)
+                    arrayAlunos.push(alunosFiltrado)
+
+            });
+        } else {
+            arrayAlunosFiltrado.push(curso)
+
+            curso.alunos.forEach(alunosFiltrado => {
+                if (alunosFiltrado.status == status)
+                    arrayAlunos.push(alunosFiltrado)
+            })
+        }
 
         jsonAlunos.alunos = arrayAlunos
 
         return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
     }
-    // console.log(getAlunoStatus('Finalizado'));
+    // console.log(getAlunoStatus('Finalizado', getAlunoCurso('RDS')));
 
-const getAlunoAnos = function(ano, status = undefined) {
+const getConclusao = function(ano, curso) {
 
         let jsonAlunos = {}
         let arrayAlunos = []
-        let arrayAlunosFiltro = []
+        let jsonAlunosFiltro = []
 
-        alunos.alunos.forEach(aluno => {
+        if (curso == undefined) {
 
-            if (aluno.curso[0].conclusao == ano)
-                arrayAlunos.push(aluno)
-        });
+            jsonAlunosFiltro.alunos = alunos.alunos
 
-        arrayAlunos.forEach(alunosFiltrado => {
-            if (alunosFiltrado.status == status) {
+            jsonAlunosFiltro.alunos.forEach(alunosFiltrado => {
 
-                arrayAlunosFiltro.push(alunosFiltrado)
-            }
+                alunosFiltrado.curso.forEach(alunosFiltradoCurso => {
 
-        })
+                    if (alunosFiltradoCurso.conclusao == ano)
+                        arrayAlunos.push(alunosFiltrado)
+                });
+            })
+        } else {
+            jsonAlunosFiltro.filtroAlunos = curso
 
-        jsonAlunos.alunos = arrayAlunosFiltro.length == 0 ? arrayAlunos : arrayAlunosFiltro
+            jsonAlunosFiltro.filtroAlunos.alunos.forEach(alunosFiltrado => {
 
+                alunosFiltrado.curso.forEach(alunosFiltradoCurso => {
+
+
+                    if (alunosFiltradoCurso.conclusao == ano)
+                        arrayAlunos.push(alunosFiltrado)
+                });
+            })
+        }
+
+        jsonAlunos.alunos = arrayAlunos
         return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
     }
-    // console.log(getAlunoAnos(2022));
+    // console.log(getConclusao(20228, getAlunoCurso('RDS')));
 
-const getTeste = function(ano, json = undefined) {
+const getStatusConclusao = function(ano, status) {
 
-    let filtroAlunos = []
-    let jsonAlunos = {}
-    let arrayAlunos = []
+        let jsonAlunos = {}
+        let arrayAlunos = []
+        let jsonAlunosFiltro = []
 
-    if (json == undefined)
-        filtroAlunos.push(alunos.alunos)
-    else
-        filtroAlunos.push(json)
+        if (status == undefined) {
 
-    filtroAlunos.forEach(aluno => {
+            jsonAlunosFiltro.alunos = alunos.alunos
 
-        aluno.alunos.forEach(alunosFiltrado => {
+            jsonAlunosFiltro.alunos.forEach(alunosFiltrado => {
 
-            alunosFiltrado.curso.forEach(element => {
+                alunosFiltrado.curso.forEach(alunosFiltradoCurso => {
 
-                if (element.conclusao == ano)
-                    arrayAlunos.push(element)
+                    if (alunosFiltradoCurso.conclusao == ano)
+                        arrayAlunos.push(alunosFiltrado)
+                });
             })
+        } else {
+            jsonAlunosFiltro.filtroAlunos = status
 
-        })
-    })
+            jsonAlunosFiltro.filtroAlunos.alunos.forEach(alunosFiltrado => {
+
+                alunosFiltrado.curso.forEach(alunosFiltradoCurso => {
+
+
+                    if (alunosFiltradoCurso.conclusao == ano)
+                        arrayAlunos.push(alunosFiltrado)
+                });
+            })
+        }
+
+        jsonAlunos.alunos = arrayAlunos
+        return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
+    }
+    // console.log(getStatusConclusao(2021, getAlunoStatus('Finalizado')))
+
+const getDisciplinas = function(matricula) {
+
+    jsonAlunos = {}
+    arrayAlunos = []
+
+    alunos.alunos.forEach(alunosFiltrado => {
+
+        if (alunosFiltrado.matricula == matricula) {
+
+            alunosFiltrado.curso.map(curso => {
+
+                // console.log(curso.disciplinas);
+
+                arrayAlunos.push({
+                    Aluno: alunosFiltrado.nome,
+                    Foto: alunosFiltrado.foto,
+                    Matricula: alunosFiltrado.matricula,
+                    Curso: curso.nome,
+                    Disciplinas: curso.disciplinas
+                })
+            })
+        }
+    });
 
     jsonAlunos.alunos = arrayAlunos
 
     return (jsonAlunos.alunos).length != 0 ? jsonAlunos : false
 }
-console.log(getTeste(2022, getAlunoCurso('DS')));
-// console.log(getAlunoStatus('Finalizado'));
+
+// console.log(getDisciplinas("20151001001"));
+
 
 
 module.exports = {
@@ -151,5 +214,8 @@ module.exports = {
     getAlunos,
     getAlunoMatricula,
     getAlunoCurso,
-    getAlunoStatus
+    getAlunoStatus,
+    getConclusao,
+    getStatusConclusao,
+    getDisciplinas
 }

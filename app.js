@@ -48,6 +48,7 @@ app.use((request, response, next) => {
 })
 
 const functions = require('./model/function/function.js')
+const { getAlunoCurso, getAlunoStatus, getConclusao } = require('./model/function/function.js')
 
 app.get('/v1/lion-school/cursos', cors(), async function(request, response, next) {
 
@@ -73,28 +74,107 @@ app.get('/v1/lion-school/alunos', cors(), async function(request, response, next
 
     let curso = request.query.curso
     let status = request.query.status
+    let conclusao = request.query.conclusao
     let statusCode
     let listaAlunos = {}
-    let aluno
 
-    if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '') {
-        statusCode = 400
-        dadosAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
-    } else {
 
-        if (curso == undefined && status == undefined)
-            aluno = functions.getAlunos()
-        else if (status == undefined)
+
+
+    if (curso === undefined && status === undefined && conclusao === undefined) {
+
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
+            let aluno = functions.getAlunos()
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
+    } else if (curso == undefined && status == undefined) {
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
+            aluno = functions.getConclusao(conclusao, getAlunoCurso(curso))
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
+    } else if (status == undefined && conclusao == undefined) {
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
             aluno = functions.getAlunoCurso(curso)
-        else
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
+    } else if (curso == undefined && conclusao == undefined) {
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
             aluno = functions.getAlunoStatus(status)
-    }
-    if (aluno) {
-        statusCode = 200
-        listaAlunos = aluno
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
+    } else if (curso == undefined) {
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
+            aluno = functions.getStatusConclusao(conclusao, getAlunoStatus(status))
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
+    } else if (status == undefined) {
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
+            aluno = functions.getConclusao(conclusao, getAlunoCurso(curso))
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
     } else {
-        statusCode = 404
+        if (!isNaN(status) || !isNaN(curso) || status == '' || curso == '' || conclusao == '' || isNaN(conclusao)) {
+            statusCode = 400
+            listaAlunos.message = ("Não é possível processar a requisição pois o curso ou o status está incorreto")
+            aluno = functions.getAlunoStatus(status, getAlunoCurso(curso))
+
+            if (aluno) {
+                statusCode = 200
+                listaAlunos = aluno
+            } else {
+                statusCode = 404
+            }
+        }
     }
+
 
 
     response.status(statusCode)
