@@ -12,6 +12,11 @@
     font-weight: 500;
 }
 
+#myChart {
+    width: 7%;
+    height: 7%;
+}
+
 .container {
     display: flex;
     gap: 3rem;

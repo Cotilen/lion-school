@@ -12,8 +12,7 @@ const getStudentInformartions = () => {
     var largura = window.innerWidth;
 
     const ctx = document.getElementById("myChart");
-    ctx.style.height = '500px'
-    ctx.style.width = '700px'
+
 
     if (largura < 400) {
         ctx.style.height = '300px'
@@ -44,10 +43,19 @@ const getStudentInformartions = () => {
             }
         });
 
+        let arrayDiscipline = []
+
+        disciplineName.forEach(element => {
+
+            let discipline = element.split(' ').map(word => word.charAt(0) + word.charAt(1)).join('')
+
+            arrayDiscipline.push(element.split(' ').map(word => word.charAt(0) + word.charAt(1)).join(''))
+        });
+
         const myChart = new Chart(ctx, {
             type: "bar",
             data: {
-                labels: disciplineName,
+                labels: arrayDiscipline,
                 datasets: [{
                     label: `Media de Notas`,
                     data: disciplineAverage,
@@ -69,7 +77,6 @@ const getStudentInformartions = () => {
 
     const studentsInfo = async() => {
         let aluno = await fetchData()
-        console.log(aluno);
         const container = document.getElementById("container");
 
         let studentProfile = document.getElementById('container-aluno-unico')
