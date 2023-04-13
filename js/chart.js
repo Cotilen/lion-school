@@ -11,16 +11,25 @@ const getStudentInformartions = () => {
 
     var largura = window.innerWidth;
 
+    function atualizarPagina() {
+        // recarregar a página
+        location.reload();
+    }
+
+    // executar a função atualizarPagina toda vez que a largura da tela mudar
+    window.addEventListener('resize', atualizarPagina);
+
+
     const ctx = document.getElementById("myChart");
 
 
-    if (largura < 400) {
-        ctx.style.height = '300px'
-        ctx.style.width = '350px'
-    } else if (largura <= 650) {
-        ctx.style.height = '300px'
-        ctx.style.width = '500px'
-    }
+    // if (largura < 400) {
+    //     ctx.style.height = '300px'
+    //     ctx.style.width = '350px'
+    // } else if (largura <= 650) {
+    //     ctx.style.height = '300px'
+    //     ctx.style.width = '500px'
+    // }
 
     const updateChart = async() => {
         const data = await fetchData();
@@ -65,6 +74,7 @@ const getStudentInformartions = () => {
                 }, ],
             },
             options: {
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
