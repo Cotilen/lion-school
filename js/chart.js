@@ -3,7 +3,7 @@ const getStudentInformartions = () => {
     const fetchData = async() => {
 
         let aluno = localStorage.getItem('matricula')
-        let url = `https://api-lionschool.onrender.com/v1/lion-school/alunos/${aluno}`
+        let url = `https://lion-api.onrender.com/v1/lion-school/alunos/${aluno}`
         const response = await fetch(url);
         const data = await response.json();
         return data;

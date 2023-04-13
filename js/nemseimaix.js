@@ -2,7 +2,7 @@
 const fetchData = async function() {
     let matricula = localStorage.getItem('matricula')
 
-    let url = `https://api-lionschool.onrender.com/v1/lion-school/alunos/${matricula}`
+    let url = `https://lion-api.onrender.com/v1/lion-school/alunos/${matricula}`
 
     let response = await fetch(url)
     let data = await response.json()
