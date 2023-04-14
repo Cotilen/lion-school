@@ -29,7 +29,7 @@ const criarCardsCurso = (curso) => {
 }
 const carregarCardsCurso = async() => {
 
-    let url = "https://lion-api.onrender.com/v1/lion-school/cursos"
+    let url = "https://integracao-escola.onrender.com/v1/lion-school/cursos"
 
     let response = await fetch(url)
     let data = await response.json()
@@ -85,14 +85,14 @@ const carregarCardsAlunos = async() => {
     const gerarEstudantes = async function(status = 'Status', conclusao = "Conclusao") {
         //status = 'Status' => É quando o status está undefined, o mesmo acontece com conclusao
 
-        let url = `https://lion-api.onrender.com/v1/lion-school/alunos?curso=${curso}`
+        let url = `https://integracao-escola.onrender.com/v1/lion-school/alunos?curso=${curso}`
 
         if (status != 'Status' && conclusao == 'Conclusao') {
-            url = `https://lion-api.onrender.com/v1/lion-school/alunos?status=${status}&curso=${curso}`
+            url = `https://integracao-escola.onrender.com/v1/lion-school/alunos?status=${status}&curso=${curso}`
         } else if (status == "Status" && conclusao != "Conclusao") {
-            url = `https://lion-api.onrender.com/v1/lion-school/alunos?curso=${curso}&conclusao=${conclusao}`
+            url = `https://integracao-escola.onrender.com/v1/lion-school/alunos?curso=${curso}&conclusao=${conclusao}`
         } else if (status != 'Status' && conclusao != "Conclusao") {
-            url = `https://lion-api.onrender.com/v1/lion-school/alunos?status=${status}&curso=${curso}&conclusao=${conclusao}`
+            url = `https://integracao-escola.onrender.com/v1/lion-school/alunos?status=${status}&curso=${curso}&conclusao=${conclusao}`
 
         }
         let response = await fetch(url)
@@ -153,7 +153,7 @@ const carregarConclusao = async function() {
 
     const comboBoxConclusao = document.getElementById('selectConclusao')
 
-    let url = "https://lion-api.onrender.com/v1/lion-school/conclusao/alunos"
+    let url = "https://integracao-escola.onrender.com/v1/lion-school/conclusao/alunos"
 
     let response = await fetch(url)
     let data = await response.json()
